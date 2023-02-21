@@ -53,12 +53,14 @@ describe("Investment", function () {
         testPool.best_price
       );
 
-      expect(await investContract._currentPoolId()).equal("1");
+      expect((await investContract._currentPoolId()).toString()).equal("1");
       expect((await investContract._pools(1))[0]).equals(testPool.name);
-      expect((await investContract._pools(1))[1]).equals(
-        await investContract._currentPoolId()
+      expect((await investContract._pools(1))[1].toString()).equals(
+        (await investContract._currentPoolId()).toString()
       );
-      expect((await investContract._pools(1))[2]).equals(testPool.best_price);
+      expect((await investContract._pools(1))[2].toString()).equals(
+        testPool.best_price
+      );
       expect((await investContract._pools(1))[3]).equals(
         testPool._paymentToken
       );
@@ -73,26 +75,36 @@ describe("Investment", function () {
       );
 
       console.log("pools", await investContract._pools(1));
-      expect(await token.balanceOf(investContract.address)).equal("0");
+      expect((await token.balanceOf(investContract.address)).toString()).equal(
+        "0"
+      );
 
       await token.connect(alice).approve(investContract.address, "5");
 
       await investContract
         .connect(alice)
         .purchaseNFT(purcaseInfo.pid, purcaseInfo.amount, purcaseInfo.data);
-      expect(await token.balanceOf(investContract.address)).equal("5");
+      expect((await token.balanceOf(investContract.address)).toString()).equal(
+        "5"
+      );
       expect(
-        await investContract.balanceOf(
-          await alice.getAddress(),
-          purcaseInfo.pid
-        )
+        (
+          await investContract.balanceOf(
+            await alice.getAddress(),
+            purcaseInfo.pid
+          )
+        ).toString()
       ).equal(purcaseInfo.amount);
 
       // Test Withdraw
 
       await investContract.withdraw(token.address, await bob.getAddress(), "1");
-      expect(await token.balanceOf(investContract.address)).equal("4");
-      expect(await token.balanceOf(await bob.getAddress())).equal("1");
+      expect((await token.balanceOf(investContract.address)).toString()).equal(
+        "4"
+      );
+      expect((await token.balanceOf(await bob.getAddress())).toString()).equal(
+        "1"
+      );
 
       //ETH_WITHDRAW TEST
       await investContract.withdraw(ZERO, await bob.getAddress(), "0");

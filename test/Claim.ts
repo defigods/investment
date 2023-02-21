@@ -86,17 +86,25 @@ describe("Claiming", function () {
       );
 
       console.log("claim", await claimContract._pools(1));
-      expect(await claimContract._currentPoolId()).equal("1");
+      expect((await claimContract._currentPoolId()).toString()).equal("1");
       expect((await claimContract._pools(1))[0]).equals(testPool.name);
       expect((await claimContract._pools(1))[1]).equals(
         testPool.contractAddress
       );
 
-      expect((await claimContract._pools(1))[2]).equals(testPool.tokenId);
-      expect((await claimContract._pools(1))[3]).equals(testPool.totalAmount);
+      expect((await claimContract._pools(1))[2].toString()).equals(
+        testPool.tokenId
+      );
+      expect((await claimContract._pools(1))[3].toString()).equals(
+        testPool.totalAmount
+      );
 
-      expect((await claimContract._pools(1))[4]).equals(testPool.rewardToken);
-      expect((await claimContract._pools(1))[5]).equals(testPool.rewardAmount);
+      expect((await claimContract._pools(1))[4].toString()).equals(
+        testPool.rewardToken
+      );
+      expect((await claimContract._pools(1))[5].toString()).equals(
+        testPool.rewardAmount
+      );
     });
   });
   describe("createPool", () => {
@@ -117,11 +125,13 @@ describe("Claiming", function () {
       );
 
       expect(
-        await investContract.balanceOf(
-          await alice.getAddress(),
-          purcaseInfo.pid
-        )
-      ).equal(5);
+        (
+          await investContract.balanceOf(
+            await alice.getAddress(),
+            purcaseInfo.pid
+          )
+        ).toString()
+      ).equal("5");
 
       await investContract
         .connect(alice)
@@ -130,11 +140,13 @@ describe("Claiming", function () {
       // Claim
       await claimContract.connect(alice).claim("1");
       expect(
-        await investContract.balanceOf(
-          await alice.getAddress(),
-          purcaseInfo.pid
-        )
-      ).equal(0);
+        (
+          await investContract.balanceOf(
+            await alice.getAddress(),
+            purcaseInfo.pid
+          )
+        ).toString()
+      ).equal("0");
     });
   });
 });
